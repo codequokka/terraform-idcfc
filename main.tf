@@ -1,42 +1,3 @@
-variable "api_url" {
-  type = string
-}
-
-variable "api_key" {
-  type = string
-}
-
-variable "secret_key" {
-  type = string
-}
-
-variable "network_id" {
-  type = string
-}
-
-variable "zone" {
-  type = string
-}
-
-variable "my_ip" {
-  type = string
-}
-
-terraform {
-  required_providers {
-    cloudstack = {
-      source  = "cloudstack/cloudstack"
-      version = "0.4.0"
-    }
-  }
-}
-
-provider "cloudstack" {
-  api_url    = var.api_url
-  api_key    = var.api_key
-  secret_key = var.secret_key
-}
-
 resource "cloudstack_instance" "bastion" {
   name             = "bastion"
   service_offering = "light.S1"
@@ -69,8 +30,4 @@ resource "cloudstack_firewall" "my_ip" {
     protocol  = "tcp"
     ports     = ["22"]
   }
-}
-
-output "public_ipaddress" {
-  value = cloudstack_ipaddress.public_ipaddress.ip_address
 }
