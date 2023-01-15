@@ -1,9 +1,9 @@
+variable "api_url" {}
 variable "api_key" {}
 variable "secret_key" {}
-variable "my_ip" {}
-variable "api_url" {}
 variable "network_id" {}
-variable "ip_address_id" {}
+variable "zone" {}
+variable "my_ip" {}
 
 terraform {
   required_providers {
@@ -25,18 +25,18 @@ resource "cloudstack_instance" "bastion" {
   service_offering = "light.S1"
   network_id       = var.network_id
   template         = "Rocky Linux 8.4 64-bit"
-  zone             = "augusta"
+  zone             = var.zone
   keypair          = "id_rsa"
   expunge          = true
 }
 
-# resource "cloudstack_ipaddress" "public_ipaddress" {
-#   network_id = var.network_id
-#   zone       = "augusta"
-# }
+resource "cloudstack_ipaddress" "public_ipaddress" {
+  network_id = var.network_id
+  zone       = var.zone
+}
 
 resource "cloudstack_port_forward" "pf_ssh" {
-  ip_address_id = var.ip_address_id
+  ip_address_id = cloudstack_ipaddress.public_ipaddress.id
   forward {
     protocol           = "tcp"
     private_port       = 22
@@ -46,14 +46,14 @@ resource "cloudstack_port_forward" "pf_ssh" {
 }
 
 resource "cloudstack_firewall" "my_ip" {
-  ip_address_id = var.ip_address_id
+  ip_address_id = cloudstack_ipaddress.public_ipaddress.id
   rule {
     cidr_list = ["${var.my_ip}/32"]
     protocol  = "tcp"
-    ports     = ["1-65535"]
+    ports     = ["22"]
   }
 }
 
-# output "public_ipaddress" {
-#   value = cloudstack_ipaddress.public_ipaddress.ip_address
-# }
+output "public_ipaddress" {
+  value = cloudstack_ipaddress.public_ipaddress.ip_address
+}
