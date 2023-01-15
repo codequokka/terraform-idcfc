@@ -1,9 +1,26 @@
-variable "api_url" {}
-variable "api_key" {}
-variable "secret_key" {}
-variable "network_id" {}
-variable "zone" {}
-variable "my_ip" {}
+variable "api_url" {
+  type = string
+}
+
+variable "api_key" {
+  type = string
+}
+
+variable "secret_key" {
+  type = string
+}
+
+variable "network_id" {
+  type = string
+}
+
+variable "zone" {
+  type = string
+}
+
+variable "my_ip" {
+  type = string
+}
 
 terraform {
   required_providers {
