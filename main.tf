@@ -1,10 +1,21 @@
 resource "cloudstack_instance" "bastion" {
-  name             = "bastion"
+  name             = "idcfc-west-bastion"
   service_offering = "light.S1"
   network_id       = var.network_id
   template         = "Rocky Linux 8.4 64-bit"
   zone             = var.zone
-  keypair          = "id_rsa"
+  keypair          = cloudstack_ssh_keypair.id_rsa.name
+  expunge          = true
+}
+
+resource "cloudstack_instance" "workstation" {
+  name             = "idcfc-west-workstation"
+  service_offering = "standard.S8"
+  network_id       = var.network_id
+  template         = "Rocky Linux 8.4 64-bit"
+  zone             = var.zone
+  keypair          = cloudstack_ssh_keypair.id_rsa.name
+  root_disk_size   = 80
   expunge          = true
 }
 
@@ -30,4 +41,9 @@ resource "cloudstack_firewall" "my_ip" {
     protocol  = "tcp"
     ports     = ["22"]
   }
+}
+
+resource "cloudstack_ssh_keypair" "id_rsa" {
+  name       = "id.rsa"
+  public_key = file("~/.ssh/id_rsa.pub")
 }
