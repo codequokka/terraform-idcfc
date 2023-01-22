@@ -37,7 +37,7 @@ resource "cloudstack_port_forward" "pf_ssh" {
 resource "cloudstack_firewall" "my_ip" {
   ip_address_id = cloudstack_ipaddress.public_ipaddress.id
   rule {
-    cidr_list = ["${var.my_ip}/32"]
+    cidr_list = var.cidr_list
     protocol  = "tcp"
     ports     = ["22"]
   }

@@ -18,6 +18,6 @@ variable "zone" {
   type = string
 }
 
-variable "my_ip" {
-  type = string
+variable "cidr_list" {
+  type = list(string)
 }
