@@ -19,6 +19,17 @@ resource "cloudstack_instance" "workstation" {
   expunge          = true
 }
 
+resource "cloudstack_instance" "k8s-study" {
+  name             = "idcfc-west-k8s-study"
+  service_offering = "standard.S8"
+  network_id       = var.network_id
+  template         = "Rocky Linux 8.4 64-bit"
+  zone             = var.zone
+  keypair          = cloudstack_ssh_keypair.id_rsa.name
+  root_disk_size   = 80
+  expunge          = true
+}
+
 resource "cloudstack_ipaddress" "public_ipaddress" {
   network_id = var.network_id
   zone       = var.zone
