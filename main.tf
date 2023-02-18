@@ -21,7 +21,7 @@ resource "cloudstack_instance" "workstation" {
 
 resource "cloudstack_instance" "k8s-study" {
   name             = "idcfc-west-k8s-study"
-  service_offering = "standard.S8"
+  service_offering = "standard.M8"
   network_id       = var.network_id
   template         = "Rocky Linux 8.4 64-bit"
   zone             = var.zone
